@@ -74,17 +74,29 @@ I would focus on cases that affect correctness and stability:
 
 ## 1) Code Review Findings
 ### Critical bugs
-- 
+- Right now it counts anything with an @ as “valid”, even if it’s clearly not an email.
+
+- It also breaks if the list has non-strings (like None or an int), because "@" in email won’t work on those.
 
 ### Edge cases & risks
-- 
+- Strings like "@", "a@", "@b", or "a@b@c" are counted as valid even though they are not.
+
+- Whitespace-only strings or empty values are not handled explicitly.
 
 ### Code quality / design issues
-- 
+- The validation logic is too weak for the claim of counting “valid email addresses”.
+
+- The explanation overstates what the function actually does.
 
 ## 2) Proposed Fixes / Improvements
 ### Summary of changes
-- 
+- Ensure each entry is a string before validating.
+
+- Require exactly one "@" with non-empty local and domain parts.
+
+- Perform a basic domain check instead of relying on "@" alone.
+
+- Ignore invalid inputs safely.
 
 ### Corrected code
 See `correct_task2.py`
@@ -94,21 +106,34 @@ See `correct_task2.py`
 
 ### Testing Considerations
 If you were to test this function, what areas or scenarios would you focus on, and why?
+I would test:
+
+- An empty list and a list with only invalid values.
+
+- Emails missing a local or domain part.
+
+- Emails with multiple "@" symbols.
+
+- Lists containing non-string values such as None or numbers.
 
 ## 3) Explanation Review & Rewrite
 ### AI-generated explanation (original)
 > This function counts the number of valid email addresses in the input list. It safely ignores invalid entries and handles empty input correctly.
 
 ### Issues in original explanation
-- 
+- The function does not actually validate email addresses beyond checking for "@".
+
+- It does not safely handle non-string inputs.
+
+- The explanation claims correctness that the code does not provide.
 
 ### Rewritten explanation
-- 
+- This function counts email addresses that pass a basic sanity check. It ensures each value is a string, contains exactly one "@", and has non-empty local and domain parts. Invalid entries are skipped.
 
 ## 4) Final Judgment
-- Decision: Approve / Request Changes / Reject
-- Justification:
-- Confidence & unknowns:
+- Decision: Request Changes
+- Justification: The original implementation overcounts invalid emails and can fail on non-string inputs. The corrected version aligns the logic with the intended behavior and handles common edge cases safely.
+- Confidence & unknowns: High confidence for basic validation. Full RFC email validation is intentionally out of scope.
 
 ---
 
