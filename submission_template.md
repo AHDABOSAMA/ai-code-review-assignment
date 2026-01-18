@@ -1,8 +1,8 @@
 # AI Code Review Assignment (Python)
 
 ## Candidate
-- Name:
-- Approximate time spent:
+- Name: Ahdab kasim
+- Approximate time spent: 60 minute
 
 ---
 
@@ -10,17 +10,27 @@
 
 ## 1) Code Review Findings
 ### Critical bugs
-- 
+- The numerator ignores cancelled orders, but the denominator doesn’t — so the math is off.
+
+Empty input blows up because of a divide-by-zero.
 
 ### Edge cases & risks
-- 
+- If all orders are cancelled, the function still divides by the full list length and returns a misleading result.
+
+The code assumes each item is a dictionary with status and amount fields, which can cause runtime errors for malformed inputs.
 
 ### Code quality / design issues
-- 
+- The denominator does not reflect the stated business rule (“average over non-cancelled orders”).
+
+There is no validation or safe handling for unexpected input types.
 
 ## 2) Proposed Fixes / Improvements
 ### Summary of changes
-- 
+- Track only non-cancelled orders and divide by their count instead of len(orders).
+
+Return 0.0 when no valid orders exist to avoid division by zero.
+
+Skip malformed entries and ignore non-numeric amounts to keep the function safe.
 
 ### Corrected code
 See `correct_task1.py`
