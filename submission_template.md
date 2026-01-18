@@ -106,6 +106,7 @@ See `correct_task2.py`
 
 ### Testing Considerations
 If you were to test this function, what areas or scenarios would you focus on, and why?
+
 I would test:
 
 - An empty list and a list with only invalid values.
