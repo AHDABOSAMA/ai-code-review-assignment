@@ -142,17 +142,28 @@ I would test:
 
 ## 1) Code Review Findings
 ### Critical bugs
-- 
+- The code skips None values in the sum, but still divides by len(values), so the average is wrong.
+
+- It can crash on empty input (division by zero).
 
 ### Edge cases & risks
-- 
+- If the list contains strings or other non-numeric types, float(v) can raise and the function fails.
+
+- If all values are None (or invalid), it should not crash.
 
 ### Code quality / design issues
-- 
+- The implementation doesn’t match what the explanation claims (it’s not actually “safe” for mixed inputs).
+
+- The variable count is used as total length, not “valid values count”, which is the real intention.
 
 ## 2) Proposed Fixes / Improvements
 ### Summary of changes
-- 
+- Track the number of valid measurements and divide by that count (not the full input length).
+
+- Skip None and values that can’t be converted to float.
+
+- Return 0.0 if there are no valid numeric measurements.
+
 
 ### Corrected code
 See `correct_task3.py`
@@ -162,18 +173,30 @@ See `correct_task3.py`
 ### Testing Considerations
 If you were to test this function, what areas or scenarios would you focus on, and why?
 
+I would test:
+
+- Empty list and all-None input (should return 0.0).
+
+- A normal numeric list.
+
+- Mixed input like [1, "2", None, "bad"] to ensure invalid values don’t crash the function.
+
+- Cases where only one valid numeric value exists.
+
 
 ## 3) Explanation Review & Rewrite
 ### AI-generated explanation (original)
 > This function calculates the average of valid measurements by ignoring missing values (None) and averaging the remaining values. It safely handles mixed input types and ensures an accurate average
 
 ### Issues in original explanation
-- 
+- The original code divides by the full list length, so it doesn’t actually average only the valid values.
+
+- It doesn’t safely handle mixed types unless everything is convertible to float.
 
 ### Rewritten explanation
-- 
+- It goes through the values one by one, skips the ones that don’t work, and averages what’s left. If nothing valid is found, it just returns 0.0.
 
 ## 4) Final Judgment
-- Decision: Approve / Request Changes / Reject
-- Justification:
-- Confidence & unknowns:
+- Decision:  Request Changes 
+- Justification: The original implementation returns incorrect averages and can fail on common inputs. The corrected version matches the intended behavior and avoids crashing.
+- Confidence & unknowns: The fix is solid for the intended behavior. One remaining decision is whether invalid values should be ignored or cause an error, but ignoring them is a reasonable choice for this case.
