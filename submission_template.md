@@ -38,15 +38,16 @@ See `correct_task1.py`
 
  ### Testing Considerations
 If you were to test this function, what areas or scenarios would you focus on, and why?
+
 I would focus on cases that affect correctness and stability:
 
-An empty list or a list where all orders are cancelled, to confirm the function returns 0.0 without errors.
+- An empty list or a list where all orders are cancelled, to confirm the function returns 0.0 without errors.
 
-A mix of cancelled and non-cancelled orders, to ensure only valid orders affect the average.
+- A mix of cancelled and non-cancelled orders, to ensure only valid orders affect the average.
 
-Orders with missing or invalid amount values, to verify they are skipped instead of crashing.
+- Orders with missing or invalid amount values, to verify they are skipped instead of crashing.
 
-Unexpected inputs (e.g. None or non-dict values) to confirm the function handles them safely.
+- Unexpected inputs (e.g. None or non-dict values) to confirm the function handles them safely.
 
 
 ## 3) Explanation Review & Rewrite
@@ -63,9 +64,9 @@ Unexpected inputs (e.g. None or non-dict values) to confirm the function handles
 - This function calculates the average order value using only non-cancelled orders. It adds up valid numeric amounts and divides by the number of orders included in the calculation. Invalid entries are ignored, and the function returns 0.0 when no valid orders are present.
 
 ## 4) Final Judgment
-- Decision: Approve / Request Changes / Reject
-- Justification:
-- Confidence & unknowns:
+- Decision: Request Changes 
+- Justification: The original implementation returns an incorrect average and can crash on empty input. The corrected version fixes the core logic and handles common edge cases safely.
+- Confidence & unknowns: High confidence in the fix. Handling of malformed orders depends on product requirements, but skipping them is a reasonable default for this task.
 
 ---
 
